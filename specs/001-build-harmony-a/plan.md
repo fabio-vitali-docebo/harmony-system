@@ -19,10 +19,10 @@
 *Based on system diagram analysis*
 
 ### Core Services
-- **harmony-web**: Web UI with CloudFront + Cognito auth
+- **harmony-web**: CloudFront distribution with multiple BFF origins + Cognito auth
 - **event-hub**: EventBridge + Kinesis event backbone
-- **harmony-copilot-bff**: AI agent with knowledge base
-- **chat-history-bff**: GraphQL API for chat persistence
+- **harmony-copilot-bff**: AI agent with knowledge base + AppSync endpoint + S3 assets
+- **chat-history-bff**: GraphQL API for chat persistence + AppSync endpoint + S3 assets
 - **confluence-adapter**: Webhook integration
 - **presentation-builder-control**: Async presentation generation
 
@@ -42,7 +42,8 @@
 - **DI Container**: tsyringe
 - **Stream Processing**: @scramjet/framework
 - **Deployment**: CodePipeline per service
-- **Shared Code**: CDK constructor library
+- **Shared Code**: CDK constructor library + lambda-utils npm package
+- **Lambda Utils**: Releasable npm library with centralized helper functions
 
 ---
 
@@ -58,7 +59,8 @@ harmony-system/
 │   ├── confluence-adapter/           # Webhook handler + event publisher
 │   └── presentation-builder-control/ # Async presentation generation
 ├── libs/
-│   └── harmony-cdk-constructs/       # Shared CDK constructor library
+│   ├── harmony-cdk-constructs/       # Shared CDK constructor library
+│   └── lambda-utils/                 # Releasable npm library with Lambda handler helpers
 ├── tools/
 │   └── pipeline-templates/           # Reusable CodePipeline configs
 └── nx.json, package.json, tsconfig.json
@@ -70,12 +72,16 @@ apps/[service-name]/
 ├── src/
 │   ├── infrastructure/
 │   │   ├── app.ts                    # CDK Application entry
-│   │   ├── stacks/                   # CDK Stack definitions
+│   │   ├── stacks/                   # CDK Stack definitions including S3/AppSync
 │   │   └── pipeline.ts               # CodePipeline definition
 │   ├── handlers/
 │   │   ├── event-processor.ts        # @scramjet stream handler
 │   │   ├── api-handler.ts            # API Gateway handler
+│   │   ├── graphql-resolvers.ts      # AppSync GraphQL resolvers (BFF services)
 │   │   └── di-container.ts           # tsyringe DI configuration
+│   ├── frontend/                     # Frontend assets for S3 deployment (BFF services)
+│   │   ├── dist/                     # Built assets
+│   │   └── src/                      # Source frontend code
 │   ├── domain/
 │   │   ├── services/                 # Business logic services
 │   │   ├── models/                   # Domain entities
@@ -92,9 +98,10 @@ apps/[service-name]/
 ## Implementation Phases
 
 ### Phase 1: Foundation (Week 1-2)
-**libs/harmony-cdk-constructs + apps/event-hub**
+**libs/harmony-cdk-constructs + libs/lambda-utils + apps/event-hub**
 
 - Shared CDK constructs library
+- Lambda utilities npm package with common helpers
 - EventBridge + Kinesis event infrastructure
 - Event ingress, routing, and archive
 - Core monitoring and observability
@@ -102,10 +109,13 @@ apps/[service-name]/
 ### Phase 2: Authentication & Web (Week 3-4)
 **apps/harmony-web**
 
-- CloudFront distribution + S3 origin
+- CloudFront distribution with multiple origins:
+  - AppSync endpoints (chat-history-bff, harmony-copilot-bff)
+  - S3 buckets for frontend assets (per BFF service)
+  - API Gateway endpoints (as needed)
 - Cognito UserPool with tenantId/role JWT claims
 - Web application shell with auth integration
-- API Gateway base setup
+- Centralized routing and caching for all BFF resources
 
 ### Phase 3: Chat Infrastructure (Week 5-6)
 **apps/chat-history-bff**
@@ -232,11 +242,36 @@ const eventBus = new HarmonyEventBus(this, 'EventBus', {
 });
 ```
 
+### Lambda Utils Library
+```typescript
+// libs/lambda-utils - Releasable npm package for centralized Lambda helpers
+export class ResponseBuilder {
+  static success<T>(data: T): APIGatewayProxyResult { /* ... */ }
+  static error(statusCode: number, message: string): APIGatewayProxyResult { /* ... */ }
+}
+
+export class EventValidator {
+  static validateTenant(event: any): boolean { /* ... */ }
+  static extractContext(event: any): TenantContext { /* ... */ }
+}
+
+export class ErrorHandler {
+  static wrapHandler<T>(handler: T): T { /* ... */ }
+  static logError(error: Error, context: any): void { /* ... */ }
+}
+
+export class MetricsHelper {
+  static recordLatency(operation: string, duration: number): void { /* ... */ }
+  static incrementCounter(metric: string): void { /* ... */ }
+}
+```
+
 ### Development Workflow
 - `nx build [service]` - Build service + dependencies
 - `nx deploy [service]` - Deploy via CDK
 - `nx test [service]` - Run tests
 - `nx affected:deploy` - Deploy only changed services
+- `nx publish lambda-utils` - Publish lambda-utils to npm registry
 
 ---
 
