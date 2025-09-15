@@ -8,30 +8,30 @@
 ## Execution Flow (main)
 ```
 1. Parse user description from Input
-   ’ Feature clearly described: AI assistant system for LMS
+   ï¿½ Feature clearly described: AI assistant system for LMS
 2. Extract key concepts from description
-   ’ Actors: LMS users (instructors, learners, admins), tenants (organizations)
-   ’ Actions: chat assistance, search, presentation generation
-   ’ Data: LMS content, tenant assets, user permissions
-   ’ Constraints: multi-tenancy, data isolation, permission inheritance
+   ï¿½ Actors: LMS users (instructors, learners, admins), tenants (organizations)
+   ï¿½ Actions: chat assistance, search, presentation generation
+   ï¿½ Data: LMS content, tenant assets, user permissions
+   ï¿½ Constraints: multi-tenancy, data isolation, permission inheritance
 3. For each unclear aspect:
-   ’ [NEEDS CLARIFICATION: specific question] markers added where needed
+   ï¿½ [NEEDS CLARIFICATION: specific question] markers added where needed
 4. Fill User Scenarios & Testing section
-   ’ User flows identified for each capability
+   ï¿½ User flows identified for each capability
 5. Generate Functional Requirements
-   ’ Each requirement testable and specific
+   ï¿½ Each requirement testable and specific
 6. Identify Key Entities (data involved)
 7. Run Review Checklist
-   ’ Spec focuses on business value, not implementation
+   ï¿½ Spec focuses on business value, not implementation
 8. Return: SUCCESS (spec ready for planning)
 ```
 
 ---
 
-## ¡ Quick Guidelines
--  Focus on WHAT users need and WHY
-- L Avoid HOW to implement (no tech stack, APIs, code structure)
-- =e Written for business stakeholders, not developers
+## ï¿½ Quick Guidelines
+- Focus on WHAT users need and WHY
+- Avoid HOW to implement (no tech stack, APIs, code structure)
+- Written for business stakeholders, not developers
 
 ### Section Requirements
 - **Mandatory sections**: Must be completed for every feature
@@ -127,14 +127,10 @@ As an LMS user (instructor, learner, or admin), I want intelligent assistance wi
 - **FR-028**: System MUST emit PresentationRequested events when users initiate presentation creation
 - **FR-029**: System MUST emit PresentationCompleted events when presentations are successfully generated
 - **FR-030**: System MUST emit PresentationFailed events when presentation generation fails
-- **FR-031**: System MUST emit ConfluencePageCreated events [NEEDS CLARIFICATION: when does this occur and what triggers it?]
+- **FR-031**: System MUST emit ConfluencePageCreated events when receiving Confluence webhook notifications about new page creation
 
-#### Unclear Requirements Needing Clarification
-- **FR-032**: System MUST handle [NEEDS CLARIFICATION: what authentication method - OAuth, SAML, custom tokens?] for LMS integration
-- **FR-033**: System MUST process requests within [NEEDS CLARIFICATION: what response time requirements?]
-- **FR-034**: System MUST support [NEEDS CLARIFICATION: how many concurrent users per tenant?]
-- **FR-035**: System MUST retain user data for [NEEDS CLARIFICATION: what retention period and deletion policies?]
-- **FR-036**: System MUST comply with [NEEDS CLARIFICATION: which data privacy regulations - GDPR, FERPA, COPPA?]
+#### Authentication & Integration
+- **FR-032**: System MUST handle authentication via AWS Cognito custom auth-flow that returns a JWT after starting a custom challenge from an LMS custom token
 
 ### Key Entities *(include if feature involves data)*
 
@@ -160,7 +156,7 @@ As an LMS user (instructor, learner, or admin), I want intelligent assistance wi
 - [x] All mandatory sections completed
 
 ### Requirement Completeness
-- [ ] No [NEEDS CLARIFICATION] markers remain (5 areas need clarification)
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Scope is clearly bounded
@@ -177,6 +173,6 @@ As an LMS user (instructor, learner, or admin), I want intelligent assistance wi
 - [x] User scenarios defined
 - [x] Requirements generated
 - [x] Entities identified
-- [ ] Review checklist passed (pending clarifications)
+- [x] Review checklist passed
 
 ---
