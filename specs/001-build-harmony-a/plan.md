@@ -21,15 +21,19 @@
 ### Core Services
 - **harmony-web**: CloudFront distribution with multiple BFF origins + Cognito auth
 - **event-hub**: EventBridge + Kinesis event backbone
-- **harmony-copilot-bff**: AI agent with knowledge base + AppSync endpoint + S3 assets
+- **harmony-copilot-bff**: API orchestration + AppSync endpoint + S3 assets
 - **chat-history-bff**: GraphQL API for chat persistence + AppSync endpoint + S3 assets
 - **confluence-adapter**: Webhook integration
 - **presentation-builder-control**: Async presentation generation
 
+### External Agent Repositories (Python + strands-agents)
+- **harmony-copilot-agent**: Python strands-agents implementation → AWS AgentCore
+- **presentation-builder-agent**: Python strands-agents implementation → AWS AgentCore
+
 ### Key Integration Points
 - **Devloop LMS**: External system integration
 - **Confluence**: External content source
-- **AWS Bedrock**: AI/ML services
+- **AWS Bedrock**: AI/ML services + AgentCore
 - **Cognito**: Multi-tenant authentication
 
 ---
@@ -133,16 +137,19 @@ apps/[service-name]/
 - Tenant context extraction
 
 ### Phase 5: AI Copilot Core (Week 7-9)
-**apps/harmony-copilot-bff**
+**apps/harmony-copilot-bff + harmony-copilot-agent (external repo)**
 
-- AgentCore AI conversation engine
+- AgentCore infrastructure deployment (CDK)
+- Agent implementation (Python strands-agents - separate repo)
 - Bedrock Knowledge Base (tenant + role partitioned)
 - Multi-source content integration
 - Citation generation
 
 ### Phase 6: Presentation Engine (Week 10-12)
-**apps/presentation-builder-control**
+**apps/presentation-builder-control + presentation-builder-agent (external repo)**
 
+- AgentCore infrastructure deployment (CDK)
+- Agent implementation (Python strands-agents - separate repo)
 - Async AI presentation generation
 - HTML slideshow creation
 - Multi-format input processing
@@ -266,12 +273,30 @@ export class MetricsHelper {
 }
 ```
 
+### External Agent Integration
+```python
+# External repositories: harmony-copilot-agent, presentation-builder-agent
+# Using strands-agents framework (Python)
+from strands_agents import Agent, Tool
+
+class HarmonyCopilotAgent(Agent):
+    def __init__(self):
+        super().__init__(name="harmony-copilot")
+        self.add_tool(KnowledgeBaseTool())
+        self.add_tool(CitationTool())
+
+    async def process_message(self, message: str, context: dict) -> str:
+        # AI conversation logic using Bedrock
+        pass
+```
+
 ### Development Workflow
 - `nx build [service]` - Build service + dependencies
-- `nx deploy [service]` - Deploy via CDK
+- `nx deploy [service]` - Deploy via CDK (includes AgentCore infrastructure)
 - `nx test [service]` - Run tests
 - `nx affected:deploy` - Deploy only changed services
 - `nx publish lambda-utils` - Publish lambda-utils to npm registry
+- External agent repos deployed independently to AgentCore
 
 ---
 
