@@ -75,10 +75,10 @@
 - [x] T020 [P] Lambda utilities EventValidator in libs/lambda-utils/src/event-validator.ts
 
 ## Phase 4: Authentication & Web Infrastructure
-- [ ] T021 [P] CloudFront distribution with multiple origins in apps/harmony-web/src/infrastructure/stacks/web-stack.ts
-- [ ] T022 [P] Cognito UserPool with JWT claims in apps/harmony-web/src/infrastructure/stacks/auth-stack.ts
-- [ ] T023 [P] Web application auth integration in apps/harmony-web/src/frontend/src/auth/auth-service.ts
-- [ ] T024 [P] Centralized routing configuration in apps/harmony-web/src/frontend/src/router/router.ts
+- [x] T021 [P] CloudFront distribution with multiple origins in apps/harmony-web/src/infrastructure/stacks/web-stack.ts
+- [x] T022 [P] Cognito UserPool with JWT claims in apps/harmony-web/src/infrastructure/stacks/auth-stack.ts
+- [x] T023 [P] Web application auth integration in apps/harmony-web/src/frontend/src/auth/auth-service.ts
+- [x] T024 [P] Centralized routing configuration in apps/harmony-web/src/frontend/src/router/router.ts
 
 ## Phase 5: Chat Infrastructure
 ### Core Models and Services
