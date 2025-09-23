@@ -1,0 +1,44 @@
+{
+  "name": "@harmony/lambda-utils",
+  "version": "1.0.0",
+  "description": "Lambda utility functions for Harmony multi-tenant system",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts"
+  },
+  "peerDependencies": {
+    "aws-lambda": "^1.0.7",
+    "@aws-lambda-powertools/logger": "^1.12.0",
+    "@aws-lambda-powertools/metrics": "^1.12.0",
+    "@aws-lambda-powertools/tracer": "^1.12.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "aws",
+    "lambda",
+    "serverless",
+    "multi-tenant",
+    "utilities",
+    "harmony"
+  ],
+  "author": "Harmony Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harmony-system/harmony-system.git",
+    "directory": "libs/lambda-utils"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

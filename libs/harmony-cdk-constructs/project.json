@@ -1,0 +1,40 @@
+{
+  "name": "harmony-cdk-constructs",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/harmony-cdk-constructs/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/harmony-cdk-constructs",
+        "main": "libs/harmony-cdk-constructs/src/index.ts",
+        "tsConfig": "libs/harmony-cdk-constructs/tsconfig.lib.json",
+        "assets": ["libs/harmony-cdk-constructs/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/harmony-cdk-constructs/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/harmony-cdk-constructs/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "coverageReporters": ["text"]
+        }
+      }
+    }
+  },
+  "tags": ["type:library", "scope:cdk"]
+}

@@ -40,11 +40,11 @@
 - External agents: Separate repositories (harmony-copilot-agent, presentation-builder-agent)
 
 ## Phase 1: Foundation Setup
-- [ ] T001 Create NX workspace structure with apps/ and libs/ directories
-- [ ] T002 Initialize package.json with NX, AWS CDK, TypeScript dependencies
-- [ ] T003 [P] Configure ESLint, Prettier, and Jest testing framework
-- [ ] T004 [P] Create libs/harmony-cdk-constructs project.json and basic CDK construct exports
-- [ ] T005 [P] Create libs/lambda-utils project.json with Lambda handler utilities
+- [x] T001 Create NX workspace structure with apps/ and libs/ directories
+- [x] T002 Initialize package.json with NX, AWS CDK, TypeScript dependencies
+- [x] T003 [P] Configure ESLint, Prettier, and Jest testing framework
+- [x] T004 [P] Create libs/harmony-cdk-constructs project.json and basic CDK construct exports
+- [x] T005 [P] Create libs/lambda-utils project.json with Lambda handler utilities
 
 ## Phase 2: Test Infrastructure (TDD) ⚠️ MUST COMPLETE BEFORE PHASE 3
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
