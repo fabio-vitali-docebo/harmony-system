@@ -50,22 +50,22 @@
 **CRITICAL: These tests MUST be written and MUST FAIL before ANY implementation**
 
 ### Event Hub Tests
-- [ ] T006 [P] Integration test EventBridge routing in apps/event-hub/test/integration/test-event-routing.spec.ts
-- [ ] T007 [P] Integration test Kinesis stream processing in apps/event-hub/test/integration/test-kinesis-processing.spec.ts
+- [x] T006 [P] Integration test EventBridge routing in apps/event-hub/test/integration/test-event-routing.spec.ts
+- [x] T007 [P] Integration test Kinesis stream processing in apps/event-hub/test/integration/test-kinesis-processing.spec.ts
 
 ### Chat History BFF Tests
-- [ ] T008 [P] Contract test GraphQL listThreads query in apps/chat-history-bff/test/contract/test-list-threads.spec.ts
-- [ ] T009 [P] Contract test GraphQL listMessages query in apps/chat-history-bff/test/contract/test-list-messages.spec.ts
-- [ ] T010 [P] Contract test GraphQL addMessage mutation in apps/chat-history-bff/test/contract/test-add-message.spec.ts
-- [ ] T011 [P] Contract test GraphQL onChatThreadUpdated subscription in apps/chat-history-bff/test/contract/test-chat-subscription.spec.ts
+- [x] T008 [P] Contract test GraphQL listThreads query in apps/chat-history-bff/test/contract/test-list-threads.spec.ts
+- [x] T009 [P] Contract test GraphQL listMessages query in apps/chat-history-bff/test/contract/test-list-messages.spec.ts
+- [x] T010 [P] Contract test GraphQL addMessage mutation in apps/chat-history-bff/test/contract/test-add-message.spec.ts
+- [x] T011 [P] Contract test GraphQL onChatThreadUpdated subscription in apps/chat-history-bff/test/contract/test-chat-subscription.spec.ts
 
 ### Copilot BFF Tests
-- [ ] T012 [P] Integration test AI conversation flow in apps/harmony-copilot-bff/test/integration/test-conversation-flow.spec.ts
-- [ ] T013 [P] Integration test knowledge base search in apps/harmony-copilot-bff/test/integration/test-knowledge-search.spec.ts
+- [x] T012 [P] Integration test AI conversation flow in apps/harmony-copilot-bff/test/integration/test-conversation-flow.spec.ts
+- [x] T013 [P] Integration test knowledge base search in apps/harmony-copilot-bff/test/integration/test-knowledge-search.spec.ts
 
 ### Presentation Builder Tests
-- [ ] T014 [P] Integration test presentation generation in apps/presentation-builder-control/test/integration/test-presentation-generation.spec.ts
-- [ ] T015 [P] Integration test HTML slide creation in apps/presentation-builder-control/test/integration/test-slide-creation.spec.ts
+- [x] T014 [P] Integration test presentation generation in apps/presentation-builder-control/test/integration/test-presentation-generation.spec.ts
+- [x] T015 [P] Integration test HTML slide creation in apps/presentation-builder-control/test/integration/test-slide-creation.spec.ts
 
 ## Phase 3: Foundation Infrastructure (ONLY after tests are failing)
 - [ ] T016 [P] EventBridge + Kinesis infrastructure in apps/event-hub/src/infrastructure/stacks/event-hub-stack.ts
