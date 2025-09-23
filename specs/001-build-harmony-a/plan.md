@@ -296,6 +296,8 @@ class HarmonyCopilotAgent(Agent):
 - `nx test [service]` - Run tests
 - `nx affected:deploy` - Deploy only changed services
 - `nx publish lambda-utils` - Publish lambda-utils to npm registry
+- `pnpm install` - Install dependencies
+- `pnpm -r build` - Build all workspace packages
 - External agent repos deployed independently to AgentCore
 
 ---
