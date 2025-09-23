@@ -75,12 +75,20 @@ As an LMS user (instructor, learner, or admin), I want intelligent assistance wi
 
 6. **Given** I'm creating a presentation and want to include web research, **When** I enable web search integration, **Then** the system includes relevant external content with source URLs, timestamps, and usage notes.
 
-### Edge Cases
-- What happens when a user searches for content they don't have permission to access?
-- How does the system handle requests that span multiple tenants?
-- What occurs when source materials are updated after a presentation is generated?
-- How does the system respond when LMS APIs are unavailable?
-- What happens when a user's permissions change during an active session?
+### Edge Cases & Error Handling
+
+#### Unauthorized Access Scenarios
+7. **Given** I search for content outside my permissions, **When** the search completes, **Then** the system returns only authorized results without indicating existence of unauthorized content.
+
+8. **Given** I attempt to access a chat thread from another tenant, **When** I make the request, **Then** the system returns a 403 Forbidden error with generic "access denied" message.
+
+#### System Degradation Scenarios
+9. **Given** LMS APIs are unavailable, **When** I request user permissions, **Then** the system falls back to cached permissions with expiry warnings.
+
+10. **Given** my presentation references updated source materials, **When** I view the presentation, **Then** the system displays version timestamps and offers to refresh content.
+
+#### Session Management Scenarios
+11. **Given** my permissions change during an active session, **When** I perform restricted actions, **Then** the system re-validates permissions and updates my access in real-time.
 
 ## Requirements *(mandatory)*
 
@@ -110,7 +118,12 @@ As an LMS user (instructor, learner, or admin), I want intelligent assistance wi
 - **FR-015**: System MUST accept user prompts and selected tenant assets as input sources
 - **FR-016**: System MUST support optional web search results as additional input
 - **FR-017**: System MUST accept uploaded files (PDF, PPTX, DOCX, images, CSV) as input sources
-- **FR-018**: System MUST generate responsive HTML slide presentations
+- **FR-018**: System MUST generate responsive HTML slide presentations that:
+  - Support mobile (320px-768px), tablet (768px-1024px), and desktop (1024px+) viewports
+  - Maintain readability with minimum 16px font size on mobile devices
+  - Are compatible with Chrome 90+, Firefox 88+, Safari 14+, and Edge 90+
+  - Include touch-friendly navigation controls for mobile devices
+  - Support print layouts for PDF export
 - **FR-019**: System MUST include citations on slides that incorporate tenant or web content
 - **FR-020**: System MUST structure output as title, sections, bullet points, images/figures/tables, and references
 
@@ -131,6 +144,29 @@ As an LMS user (instructor, learner, or admin), I want intelligent assistance wi
 
 #### Authentication & Integration
 - **FR-032**: System MUST handle authentication via AWS Cognito custom auth-flow that returns a JWT after starting a custom challenge from an LMS custom token
+
+### Non-Functional Requirements
+
+#### Performance Requirements
+- **NFR-001**: GraphQL queries MUST respond within 200ms for cached data
+- **NFR-002**: Event processing MUST complete within 30 seconds for all event types
+- **NFR-003**: Lambda cold starts MUST be under 2 seconds across all services
+- **NFR-004**: All S3 objects MUST use CloudFront for global content delivery
+
+#### Scalability Requirements
+- **NFR-005**: System MUST support up to 10,000 concurrent users per tenant
+- **NFR-006**: Knowledge base MUST handle up to 100,000 documents per tenant
+- **NFR-007**: Event processing MUST scale to 1,000 events per second
+
+#### Availability Requirements
+- **NFR-008**: System MUST maintain 99.9% uptime during business hours
+- **NFR-009**: Presentation generation MUST have <1% failure rate
+- **NFR-010**: Chat responses MUST be available within 5 seconds of user input
+
+#### Security Requirements
+- **NFR-011**: All data in transit MUST be encrypted using TLS 1.2 or higher
+- **NFR-012**: All data at rest MUST be encrypted using AES-256
+- **NFR-013**: User sessions MUST timeout after 8 hours of inactivity
 
 ### Key Entities *(include if feature involves data)*
 

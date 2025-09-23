@@ -121,31 +121,34 @@
 ## Phase 9: Integration & Security
 - [ ] T046 Multi-tenant data isolation middleware in libs/lambda-utils/src/tenant-middleware.ts
 - [ ] T047 Permission inheritance from LMS in libs/lambda-utils/src/permission-service.ts
-- [ ] T048 Event flow integration testing across all services
-- [ ] T049 Authentication flow end-to-end testing
-- [ ] T050 Cross-service communication validation
+- [ ] T048 [P] Tenant configuration service in libs/lambda-utils/src/tenant-config-service.ts
+- [ ] T049 [P] Data residency enforcement in libs/lambda-utils/src/data-residency-middleware.ts
+- [ ] T050 [P] Cross-tenant analytics anonymization in apps/event-hub/src/handlers/analytics-processor.ts
+- [ ] T051 Event flow integration testing across all services
+- [ ] T052 Authentication flow end-to-end testing
+- [ ] T053 Cross-service communication validation
 
 ## Phase 10: Polish & Optimization
-- [ ] T051 [P] Unit tests for event processing in apps/event-hub/test/unit/test-event-processor.spec.ts
-- [ ] T052 [P] Unit tests for chat services in apps/chat-history-bff/test/unit/test-chat-service.spec.ts
-- [ ] T053 [P] Unit tests for knowledge services in apps/harmony-copilot-bff/test/unit/test-knowledge-service.spec.ts
-- [ ] T054 [P] Performance tests for GraphQL queries (<200ms response time)
-- [ ] T055 [P] Update documentation in docs/api.md for all GraphQL schemas
-- [ ] T056 [P] Lambda cold start optimization across all services
-- [ ] T057 Remove code duplication and refactor shared utilities
-- [ ] T058 Manual testing scenarios from spec.md user stories
+- [ ] T054 [P] Unit tests for event processing in apps/event-hub/test/unit/test-event-processor.spec.ts
+- [ ] T055 [P] Unit tests for chat services in apps/chat-history-bff/test/unit/test-chat-service.spec.ts
+- [ ] T056 [P] Unit tests for knowledge services in apps/harmony-copilot-bff/test/unit/test-knowledge-service.spec.ts
+- [ ] T057 [P] Performance tests validating NFR-001 through NFR-004 compliance
+- [ ] T058 [P] Update documentation in docs/api.md for all GraphQL schemas
+- [ ] T059 [P] Lambda cold start optimization across all services
+- [ ] T060 Remove code duplication and refactor shared utilities
+- [ ] T061 Manual testing scenarios from spec.md user stories
 
 ## Dependencies
 ### Phase Dependencies
 - Foundation (T001-T005) before Tests (T006-T015)
 - Tests (T006-T015) before Implementation (T016-T045)
 - Core services (T016-T034) before AI services (T035-T045)
-- Implementation before Integration (T046-T050)
-- Integration before Polish (T051-T058)
+- Implementation before Integration (T046-T053)
+- Integration before Polish (T054-T061)
 
 ### Service Dependencies
 - T016-T020 (Event Hub) blocks T028-T031 (Chat History)
-- T021-T024 (Web/Auth) blocks T048-T049 (Integration testing)
+- T021-T024 (Web/Auth) blocks T051-T052 (Integration testing)
 - T025-T027 (Models) blocks T028-T031 (GraphQL)
 - T035-T037 (Infrastructure) blocks T038-T040 (Business Logic)
 
