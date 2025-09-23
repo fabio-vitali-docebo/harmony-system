@@ -68,11 +68,11 @@
 - [x] T015 [P] Integration test HTML slide creation in apps/presentation-builder-control/test/integration/test-slide-creation.spec.ts
 
 ## Phase 3: Foundation Infrastructure (ONLY after tests are failing)
-- [ ] T016 [P] EventBridge + Kinesis infrastructure in apps/event-hub/src/infrastructure/stacks/event-hub-stack.ts
-- [ ] T017 [P] Event routing handlers in apps/event-hub/src/handlers/event-processor.ts
-- [ ] T018 [P] Shared CDK constructs for EventBridge in libs/harmony-cdk-constructs/src/event-bus-construct.ts
-- [ ] T019 [P] Lambda utilities ResponseBuilder in libs/lambda-utils/src/response-builder.ts
-- [ ] T020 [P] Lambda utilities EventValidator in libs/lambda-utils/src/event-validator.ts
+- [x] T016 [P] EventBridge + Kinesis infrastructure in apps/event-hub/src/infrastructure/stacks/event-hub-stack.ts
+- [x] T017 [P] Event routing handlers in apps/event-hub/src/handlers/event-processor.ts
+- [x] T018 [P] Shared CDK constructs for EventBridge in libs/harmony-cdk-constructs/src/event-bus-construct.ts
+- [x] T019 [P] Lambda utilities ResponseBuilder in libs/lambda-utils/src/response-builder.ts
+- [x] T020 [P] Lambda utilities EventValidator in libs/lambda-utils/src/event-validator.ts
 
 ## Phase 4: Authentication & Web Infrastructure
 - [ ] T021 [P] CloudFront distribution with multiple origins in apps/harmony-web/src/infrastructure/stacks/web-stack.ts
