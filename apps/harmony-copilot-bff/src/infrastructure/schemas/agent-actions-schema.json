@@ -1,0 +1,293 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Harmony Copilot Agent Actions",
+    "description": "API schema for Harmony Copilot agent actions including knowledge base search and citation generation",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/search-knowledge": {
+      "post": {
+        "summary": "Search knowledge base content",
+        "description": "Search across LMS product documentation and tenant content with permission filtering",
+        "operationId": "searchKnowledge",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "query": {
+                    "type": "string",
+                    "description": "Natural language search query"
+                  },
+                  "scope": {
+                    "type": "string",
+                    "enum": ["product_docs", "tenant_content", "all"],
+                    "description": "Search scope limitation"
+                  },
+                  "maxResults": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20,
+                    "default": 10
+                  },
+                  "tenantId": {
+                    "type": "string",
+                    "description": "Tenant identifier for content filtering"
+                  },
+                  "userId": {
+                    "type": "string",
+                    "description": "User identifier for permission filtering"
+                  }
+                },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search results with citations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SearchResult"
+                      }
+                    },
+                    "totalResults": {
+                      "type": "integer"
+                    },
+                    "query": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-citation": {
+      "post": {
+        "summary": "Generate citation for content",
+        "description": "Generate properly formatted citation with metadata for referenced content",
+        "operationId": "generateCitation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "contentId": {
+                    "type": "string",
+                    "description": "Unique identifier for the content"
+                  },
+                  "contentType": {
+                    "type": "string",
+                    "enum": ["page", "document", "lesson", "assessment", "media"],
+                    "description": "Type of content being cited"
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL to the original content"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "Title of the content"
+                  }
+                },
+                "required": ["contentId", "contentType", "url", "title"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Generated citation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Citation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-context": {
+      "post": {
+        "summary": "Get user and tenant context",
+        "description": "Retrieve current user permissions and tenant configuration for context-aware responses",
+        "operationId": "getContext",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tenantId": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  },
+                  "currentPage": {
+                    "type": "string",
+                    "description": "Current LMS page URL for context"
+                  }
+                },
+                "required": ["tenantId", "userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User and tenant context",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserContext"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SearchResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "relevanceScore": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "source": {
+            "type": "string",
+            "enum": ["product_docs", "tenant_content"]
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "lastModified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["id", "title", "content", "url", "relevanceScore", "source"]
+      },
+      "Citation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "title": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "publishedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "accessedDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "contentType": {
+            "type": "string"
+          },
+          "formattedCitation": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "url", "title", "formattedCitation"]
+      },
+      "UserContext": {
+        "type": "object",
+        "properties": {
+          "tenantId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "currentPage": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "section": {
+                "type": "string"
+              }
+            }
+          },
+          "accessibleContent": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["tenantId", "userId", "permissions", "roles"]
+      }
+    }
+  }
+}

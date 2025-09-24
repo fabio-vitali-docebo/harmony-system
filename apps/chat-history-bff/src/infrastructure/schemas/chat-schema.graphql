@@ -1,0 +1,180 @@
+type Query {
+  listThreads(filter: ChatThreadFilterInput): ChatThreadConnection! @aws_auth(cognito_groups: ["users"])
+  listMessages(threadId: ID!, filter: MessageFilterInput): MessageConnection! @aws_auth(cognito_groups: ["users"])
+  getChatThread(id: ID!): ChatThread @aws_auth(cognito_groups: ["users"])
+  getMessage(id: ID!): Message @aws_auth(cognito_groups: ["users"])
+}
+
+type Mutation {
+  addMessage(input: MessageInput!): Message! @aws_iam @aws_auth(cognito_groups: ["users"])
+  updateMessage(input: UpdateMessageInput!): Message! @aws_iam
+  archiveThread(threadId: ID!): ChatThread! @aws_auth(cognito_groups: ["users"])
+}
+
+type Subscription {
+  onChatThreadUpdated(threadId: ID!): ChatThread! @aws_subscribe(mutations: ["addMessage", "updateMessage"]) @aws_auth(cognito_groups: ["users"])
+  onMessageAdded(threadId: ID!): Message! @aws_subscribe(mutations: ["addMessage"]) @aws_auth(cognito_groups: ["users"])
+}
+
+type ChatThread {
+  id: ID!
+  tenantId: String!
+  userId: String!
+  title: String!
+  status: ChatThreadStatus!
+  context: ChatContext
+  metadata: ChatThreadMetadata!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  lastMessageAt: AWSDateTime
+  messageCount: Int!
+}
+
+enum ChatThreadStatus {
+  ACTIVE
+  ARCHIVED
+  CLOSED
+}
+
+type ChatContext {
+  lmsPageUrl: String
+  lmsPageTitle: String
+  courseId: String
+  lessonId: String
+  userRole: String!
+  permissions: [String!]!
+}
+
+type ChatThreadMetadata {
+  tags: [String!]!
+  category: String
+  priority: ChatThreadPriority
+  source: ChatThreadSource!
+  isPublic: Boolean!
+}
+
+enum ChatThreadPriority {
+  LOW
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum ChatThreadSource {
+  USER_INITIATED
+  SYSTEM_GENERATED
+  EXTERNAL_INTEGRATION
+}
+
+type Message {
+  id: ID!
+  threadId: String!
+  tenantId: String!
+  userId: String!
+  type: MessageType!
+  content: String!
+  role: MessageRole!
+  metadata: MessageMetadata!
+  citations: [Citation!]!
+  attachments: [Attachment!]!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  parentMessageId: String
+  isEdited: Boolean!
+}
+
+enum MessageType {
+  TEXT
+  HTML
+  MARKDOWN
+  CODE
+  SYSTEM
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+type MessageMetadata {
+  tokens: Int
+  processingTimeMs: Int
+  model: String
+  categories: [String!]!
+  flags: [String!]!
+}
+
+type Citation {
+  id: ID!
+  url: String!
+  title: String!
+  source: CitationSource!
+  content: String!
+  timestamp: AWSDateTime!
+  relevanceScore: Float
+}
+
+enum CitationSource {
+  LMS_PRODUCT_DOCS
+  TENANT_CONTENT
+  WEB_SEARCH
+  USER_UPLOAD
+  KNOWLEDGE_BASE
+}
+
+type Attachment {
+  id: ID!
+  fileName: String!
+  fileType: String!
+  fileSize: Int!
+  url: String!
+}
+
+type ChatThreadConnection {
+  items: [ChatThread!]!
+  nextToken: String
+}
+
+type MessageConnection {
+  items: [Message!]!
+  nextToken: String
+}
+
+input MessageInput {
+  threadId: ID!
+  type: MessageType!
+  content: String!
+  role: MessageRole!
+  citations: [CitationInput!]
+  parentMessageId: String
+}
+
+input CitationInput {
+  url: String!
+  title: String!
+  source: CitationSource!
+  content: String!
+}
+
+input UpdateMessageInput {
+  id: ID!
+  content: String
+  reason: String
+}
+
+input ChatThreadFilterInput {
+  status: ChatThreadStatus
+  category: String
+  tags: [String!]
+  limit: Int
+  nextToken: String
+}
+
+input MessageFilterInput {
+  role: MessageRole
+  type: MessageType
+  hasAttachments: Boolean
+  limit: Int
+  nextToken: String
+}

@@ -1,0 +1,316 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Harmony Presentation Builder Actions",
+    "description": "API schema for presentation generation actions including content processing and HTML slide creation",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/generate-presentation": {
+      "post": {
+        "summary": "Generate HTML presentation",
+        "description": "Create a complete HTML slideshow from input content and requirements",
+        "operationId": "generatePresentation",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "topic": {
+                    "type": "string",
+                    "description": "Main topic or title for the presentation"
+                  },
+                  "content": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": ["text", "file", "url", "tenant_asset"]
+                        },
+                        "data": {
+                          "type": "string",
+                          "description": "Content data or reference"
+                        },
+                        "metadata": {
+                          "type": "object",
+                          "description": "Additional content metadata"
+                        }
+                      }
+                    }
+                  },
+                  "requirements": {
+                    "type": "object",
+                    "properties": {
+                      "slideCount": {
+                        "type": "integer",
+                        "minimum": 5,
+                        "maximum": 50
+                      },
+                      "audience": {
+                        "type": "string",
+                        "enum": ["beginner", "intermediate", "advanced", "mixed"]
+                      },
+                      "duration": {
+                        "type": "integer",
+                        "description": "Estimated presentation duration in minutes"
+                      },
+                      "includeWebContent": {
+                        "type": "boolean",
+                        "default": false
+                      }
+                    }
+                  },
+                  "tenantId": {
+                    "type": "string"
+                  },
+                  "userId": {
+                    "type": "string"
+                  }
+                },
+                "required": ["topic", "content", "tenantId", "userId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Presentation generation initiated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "presentationId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["queued", "processing", "completed", "failed"]
+                    },
+                    "estimatedCompletionTime": {
+                      "type": "integer",
+                      "description": "Estimated completion time in seconds"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/process-content": {
+      "post": {
+        "summary": "Process input content for presentation",
+        "description": "Extract and structure content from various input formats",
+        "operationId": "processContent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "inputs": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": ["pdf", "docx", "pptx", "txt", "url", "image"]
+                        },
+                        "source": {
+                          "type": "string",
+                          "description": "File path, URL, or content reference"
+                        },
+                        "priority": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 10,
+                          "default": 5
+                        }
+                      }
+                    }
+                  },
+                  "extractionRules": {
+                    "type": "object",
+                    "properties": {
+                      "maxContentLength": {
+                        "type": "integer",
+                        "default": 10000
+                      },
+                      "includeImages": {
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "includeTables": {
+                        "type": "boolean",
+                        "default": true
+                      }
+                    }
+                  }
+                },
+                "required": ["inputs"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Processed content structure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "processedContent": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProcessedContent"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "totalWordCount": {
+                          "type": "integer"
+                        },
+                        "suggestedSlideCount": {
+                          "type": "integer"
+                        },
+                        "detectedLanguage": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get-presentation-status": {
+      "get": {
+        "summary": "Get presentation generation status",
+        "description": "Check the current status of a presentation generation job",
+        "operationId": "getPresentationStatus",
+        "parameters": [
+          {
+            "name": "presentationId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current presentation status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresentationStatus"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProcessedContent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "heading": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "level": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tables": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "PresentationStatus": {
+        "type": "object",
+        "properties": {
+          "presentationId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "processing", "completed", "failed"]
+          },
+          "progress": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "currentStep": {
+            "type": "string"
+          },
+          "completedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "outputUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,167 @@
+type Query {
+  searchKnowledge(input: KnowledgeSearchInput!): KnowledgeSearchResult! @aws_auth(cognito_groups: ["users"])
+  getConversation(conversationId: ID!): Conversation @aws_auth(cognito_groups: ["users"])
+  listConversations(filter: ConversationFilter): ConversationConnection! @aws_auth(cognito_groups: ["users"])
+}
+
+type Mutation {
+  startConversation(input: StartConversationInput!): Conversation! @aws_auth(cognito_groups: ["users"])
+  sendMessage(input: SendMessageInput!): ConversationMessage! @aws_auth(cognito_groups: ["users"])
+  endConversation(conversationId: ID!): Boolean! @aws_auth(cognito_groups: ["users"])
+}
+
+type Subscription {
+  onMessageReceived(conversationId: ID!): ConversationMessage!
+    @aws_subscribe(mutations: ["sendMessage"])
+    @aws_auth(cognito_groups: ["users"])
+}
+
+type Conversation {
+  id: ID!
+  tenantId: String!
+  userId: String!
+  title: String
+  status: ConversationStatus!
+  context: ConversationContext
+  messages: [ConversationMessage!]!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  lastActivityAt: AWSDateTime!
+}
+
+enum ConversationStatus {
+  ACTIVE
+  ENDED
+  ERROR
+}
+
+type ConversationContext {
+  currentPage: String
+  userRole: String!
+  permissions: [String!]!
+  sessionId: String
+  agentSessionId: String
+}
+
+type ConversationMessage {
+  id: ID!
+  conversationId: ID!
+  role: MessageRole!
+  content: String!
+  citations: [Citation!]!
+  metadata: MessageMetadata
+  timestamp: AWSDateTime!
+}
+
+enum MessageRole {
+  USER
+  ASSISTANT
+  SYSTEM
+}
+
+type MessageMetadata {
+  processingTimeMs: Int
+  confidence: Float
+  model: String
+  tokens: Int
+  searchResults: Int
+}
+
+type Citation {
+  id: ID!
+  url: String!
+  title: String!
+  source: CitationSource!
+  content: String!
+  relevanceScore: Float
+  timestamp: AWSDateTime!
+  metadata: CitationMetadata
+}
+
+enum CitationSource {
+  PRODUCT_DOCS
+  TENANT_CONTENT
+  WEB_SEARCH
+  KNOWLEDGE_BASE
+}
+
+type CitationMetadata {
+  author: String
+  publishedDate: AWSDateTime
+  lastModified: AWSDateTime
+  contentType: String
+  permissions: [String!]!
+}
+
+type KnowledgeSearchResult {
+  query: String!
+  results: [SearchResult!]!
+  totalResults: Int!
+  processingTimeMs: Int!
+}
+
+type SearchResult {
+  id: ID!
+  title: String!
+  content: String!
+  url: String!
+  relevanceScore: Float!
+  source: CitationSource!
+  contentType: String!
+  lastModified: AWSDateTime
+  permissions: [String!]!
+  highlights: [String!]!
+}
+
+type ConversationConnection {
+  items: [Conversation!]!
+  nextToken: String
+  total: Int
+}
+
+input StartConversationInput {
+  title: String
+  context: ConversationContextInput
+}
+
+input ConversationContextInput {
+  currentPage: String
+  sessionId: String
+}
+
+input SendMessageInput {
+  conversationId: ID!
+  content: String!
+  context: ConversationContextInput
+}
+
+input KnowledgeSearchInput {
+  query: String!
+  scope: SearchScope = ALL
+  maxResults: Int = 10
+  filters: SearchFiltersInput
+}
+
+enum SearchScope {
+  PRODUCT_DOCS
+  TENANT_CONTENT
+  ALL
+}
+
+input SearchFiltersInput {
+  contentTypes: [String!]
+  dateRange: DateRangeInput
+  sources: [CitationSource!]
+}
+
+input DateRangeInput {
+  startDate: AWSDateTime
+  endDate: AWSDateTime
+}
+
+input ConversationFilter {
+  status: ConversationStatus
+  dateRange: DateRangeInput
+  limit: Int
+  nextToken: String
+}
