@@ -2,7 +2,7 @@ import { Construct } from 'constructs';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
 import { KinesisStream } from 'aws-cdk-lib/aws-events-targets';
 import { Stream } from 'aws-cdk-lib/aws-kinesis';
-import { Duration, RemovalPolicy } from 'aws-cdk-lib';
+import { Duration } from 'aws-cdk-lib';
 
 export interface HarmonyEventBusProps {
   tenantIsolation: boolean;
