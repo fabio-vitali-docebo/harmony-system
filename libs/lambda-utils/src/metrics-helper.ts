@@ -7,33 +7,39 @@ export class MetricsHelper {
   });
 
   static recordLatency(operation: string, duration: number, tenantId?: string): void {
-    const metadata = tenantId ? { tenantId } : {};
+    if (tenantId) {
+      this.metrics.addMetadata('tenantId', tenantId);
+    }
 
-    this.metrics.addMetric(operation, MetricUnits.Milliseconds, duration, metadata);
+    this.metrics.addMetric(operation, MetricUnits.Milliseconds, duration);
     this.metrics.publishStoredMetrics();
   }
 
   static incrementCounter(metric: string, value: number = 1, tenantId?: string): void {
-    const metadata = tenantId ? { tenantId } : {};
+    if (tenantId) {
+      this.metrics.addMetadata('tenantId', tenantId);
+    }
 
-    this.metrics.addMetric(metric, MetricUnits.Count, value, metadata);
+    this.metrics.addMetric(metric, MetricUnits.Count, value);
     this.metrics.publishStoredMetrics();
   }
 
   static recordError(errorType: string, tenantId?: string): void {
-    const metadata = {
-      errorType,
-      ...(tenantId && { tenantId }),
-    };
+    this.metrics.addMetadata('errorType', errorType);
+    if (tenantId) {
+      this.metrics.addMetadata('tenantId', tenantId);
+    }
 
-    this.metrics.addMetric('ErrorCount', MetricUnits.Count, 1, metadata);
+    this.metrics.addMetric('ErrorCount', MetricUnits.Count, 1);
     this.metrics.publishStoredMetrics();
   }
 
   static recordUserAction(action: string, tenantId: string, userId: string): void {
-    const metadata = { action, tenantId, userId };
+    this.metrics.addMetadata('action', action);
+    this.metrics.addMetadata('tenantId', tenantId);
+    this.metrics.addMetadata('userId', userId);
 
-    this.metrics.addMetric('UserAction', MetricUnits.Count, 1, metadata);
+    this.metrics.addMetric('UserAction', MetricUnits.Count, 1);
     this.metrics.publishStoredMetrics();
   }
 
@@ -61,7 +67,12 @@ export class MetricsHelper {
   }
 
   static addCustomMetric(name: string, value: number, unit: MetricUnits, metadata?: Record<string, string>): void {
-    this.metrics.addMetric(name, unit, value, metadata);
+    if (metadata) {
+      for (const [key, value] of Object.entries(metadata)) {
+        this.metrics.addMetadata(key, value);
+      }
+    }
+    this.metrics.addMetric(name, unit, value);
     this.metrics.publishStoredMetrics();
   }
 }

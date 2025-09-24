@@ -82,61 +82,61 @@
 
 ## Phase 5: Chat Infrastructure
 ### Core Models and Services
-- [ ] T025 [P] ChatThread entity model in apps/chat-history-bff/src/domain/models/chat-thread.ts
-- [ ] T026 [P] Message entity model in apps/chat-history-bff/src/domain/models/message.ts
-- [ ] T027 [P] ChatService with CRUD operations in apps/chat-history-bff/src/domain/services/chat-service.ts
+- [x] T025 [P] ChatThread entity model in apps/chat-history-bff/src/domain/models/chat-thread.ts
+- [x] T026 [P] Message entity model in apps/chat-history-bff/src/domain/models/message.ts
+- [x] T027 [P] ChatService with CRUD operations in apps/chat-history-bff/src/domain/services/chat-service.ts
 
 ### GraphQL Implementation
-- [ ] T028 AppSync GraphQL schema definition in apps/chat-history-bff/src/infrastructure/stacks/graphql-stack.ts
-- [ ] T029 DynamoDB tables with tenant partitioning in apps/chat-history-bff/src/infrastructure/stacks/database-stack.ts
-- [ ] T030 GraphQL resolvers for queries in apps/chat-history-bff/src/handlers/graphql-resolvers.ts
-- [ ] T031 Real-time subscription handlers in apps/chat-history-bff/src/handlers/subscription-handlers.ts
+- [x] T028 AppSync GraphQL schema definition in apps/chat-history-bff/src/infrastructure/stacks/graphql-stack.ts
+- [x] T029 DynamoDB tables with tenant partitioning in apps/chat-history-bff/src/infrastructure/stacks/database-stack.ts
+- [x] T030 GraphQL resolvers for queries in apps/chat-history-bff/src/handlers/graphql-resolvers.ts
+- [x] T031 Real-time subscription handlers in apps/chat-history-bff/src/handlers/subscription-handlers.ts
 
 ## Phase 6: External Integrations
-- [ ] T032 [P] Confluence webhook handlers in apps/confluence-adapter/src/handlers/webhook-processor.ts
-- [ ] T033 [P] Event publishing service in apps/confluence-adapter/src/domain/services/event-publisher.ts
-- [ ] T034 [P] Tenant context extraction in apps/confluence-adapter/src/domain/services/tenant-service.ts
+- [x] T032 [P] Confluence webhook handlers in apps/confluence-adapter/src/handlers/webhook-processor.ts
+- [x] T033 [P] Event publishing service in apps/confluence-adapter/src/domain/services/event-publisher.ts
+- [x] T034 [P] Tenant context extraction in apps/confluence-adapter/src/domain/services/tenant-service.ts
 
 ## Phase 7: AI Copilot Core
 ### Infrastructure
-- [ ] T035 [P] AgentCore infrastructure deployment in apps/harmony-copilot-bff/src/infrastructure/stacks/agent-core-stack.ts
-- [ ] T036 [P] Bedrock Knowledge Base setup in apps/harmony-copilot-bff/src/infrastructure/stacks/knowledge-base-stack.ts
-- [ ] T037 [P] S3 assets and AppSync endpoint in apps/harmony-copilot-bff/src/infrastructure/stacks/bff-stack.ts
+- [x] T035 [P] AgentCore infrastructure deployment in apps/harmony-copilot-bff/src/infrastructure/stacks/agent-core-stack.ts
+- [x] T036 [P] Bedrock Knowledge Base setup in apps/harmony-copilot-bff/src/infrastructure/stacks/knowledge-base-stack.ts
+- [x] T037 [P] S3 assets and AppSync endpoint in apps/harmony-copilot-bff/src/infrastructure/stacks/bff-stack.ts
 
 ### Business Logic
-- [ ] T038 [P] Knowledge base search service in apps/harmony-copilot-bff/src/domain/services/knowledge-service.ts
-- [ ] T039 [P] Citation generation service in apps/harmony-copilot-bff/src/domain/services/citation-service.ts
-- [ ] T040 Agent integration handlers in apps/harmony-copilot-bff/src/handlers/agent-processor.ts
+- [x] T038 [P] Knowledge base search service in apps/harmony-copilot-bff/src/domain/services/knowledge-service.ts
+- [x] T039 [P] Citation generation service in apps/harmony-copilot-bff/src/domain/services/citation-service.ts
+- [x] T040 Agent integration handlers in apps/harmony-copilot-bff/src/handlers/agent-processor.ts
 
 ## Phase 8: Presentation Engine
 ### Infrastructure
-- [ ] T041 [P] AgentCore infrastructure for presentations in apps/presentation-builder-control/src/infrastructure/stacks/agent-core-stack.ts
-- [ ] T042 [P] Async processing queue in apps/presentation-builder-control/src/infrastructure/stacks/queue-stack.ts
+- [x] T041 [P] AgentCore infrastructure for presentations in apps/presentation-builder-control/src/infrastructure/stacks/agent-core-stack.ts
+- [x] T042 [P] Async processing queue in apps/presentation-builder-control/src/infrastructure/stacks/queue-stack.ts
 
 ### Business Logic
-- [ ] T043 [P] Presentation generation service in apps/presentation-builder-control/src/domain/services/presentation-service.ts
-- [ ] T044 [P] HTML slideshow creation in apps/presentation-builder-control/src/domain/services/slide-service.ts
-- [ ] T045 Multi-format input processing in apps/presentation-builder-control/src/handlers/input-processor.ts
+- [x] T043 [P] Presentation generation service in apps/presentation-builder-control/src/domain/services/presentation-service.ts
+- [x] T044 [P] HTML slideshow creation in apps/presentation-builder-control/src/domain/services/slide-service.ts
+- [x] T045 Multi-format input processing in apps/presentation-builder-control/src/handlers/input-processor.ts
 
 ## Phase 9: Integration & Security
-- [ ] T046 Multi-tenant data isolation middleware in libs/lambda-utils/src/tenant-middleware.ts
-- [ ] T047 Permission inheritance from LMS in libs/lambda-utils/src/permission-service.ts
-- [ ] T048 [P] Tenant configuration service in libs/lambda-utils/src/tenant-config-service.ts
-- [ ] T049 [P] Data residency enforcement in libs/lambda-utils/src/data-residency-middleware.ts
-- [ ] T050 [P] Cross-tenant analytics anonymization in apps/event-hub/src/handlers/analytics-processor.ts
-- [ ] T051 Event flow integration testing across all services
-- [ ] T052 Authentication flow end-to-end testing
-- [ ] T053 Cross-service communication validation
+- [x] T046 Multi-tenant data isolation middleware in libs/lambda-utils/src/tenant-middleware.ts
+- [x] T047 Permission inheritance from LMS in libs/lambda-utils/src/permission-service.ts
+- [x] T048 [P] Tenant configuration service in libs/lambda-utils/src/tenant-config-service.ts
+- [x] T049 [P] Data residency enforcement in libs/lambda-utils/src/data-residency-middleware.ts
+- [x] T050 [P] Cross-tenant analytics anonymization in apps/event-hub/src/handlers/analytics-processor.ts
+- [x] T051 Event flow integration testing across all services
+- [x] T052 Authentication flow end-to-end testing
+- [x] T053 Cross-service communication validation
 
 ## Phase 10: Polish & Optimization
-- [ ] T054 [P] Unit tests for event processing in apps/event-hub/test/unit/test-event-processor.spec.ts
-- [ ] T055 [P] Unit tests for chat services in apps/chat-history-bff/test/unit/test-chat-service.spec.ts
-- [ ] T056 [P] Unit tests for knowledge services in apps/harmony-copilot-bff/test/unit/test-knowledge-service.spec.ts
-- [ ] T057 [P] Performance tests validating NFR-001 through NFR-004 compliance
-- [ ] T058 [P] Update documentation in docs/api.md for all GraphQL schemas
-- [ ] T059 [P] Lambda cold start optimization across all services
-- [ ] T060 Remove code duplication and refactor shared utilities
-- [ ] T061 Manual testing scenarios from spec.md user stories
+- [x] T054 [P] Unit tests for event processing in apps/event-hub/test/unit/test-event-processor.spec.ts
+- [x] T055 [P] Unit tests for chat services in apps/chat-history-bff/test/unit/test-chat-service.spec.ts
+- [x] T056 [P] Unit tests for knowledge services in apps/harmony-copilot-bff/test/unit/test-knowledge-service.spec.ts
+- [x] T057 [P] Performance tests validating NFR-001 through NFR-004 compliance
+- [x] T058 [P] Update documentation in docs/api.md for all GraphQL schemas
+- [x] T059 [P] Lambda cold start optimization across all services
+- [x] T060 Remove code duplication and refactor shared utilities
+- [x] T061 Manual testing scenarios from spec.md user stories
 
 ## Dependencies
 ### Phase Dependencies

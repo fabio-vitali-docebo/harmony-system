@@ -1,6 +1,6 @@
 import { Construct } from 'constructs';
 import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
-import { KinesisStreamTarget } from 'aws-cdk-lib/aws-events-targets';
+import { KinesisStream } from 'aws-cdk-lib/aws-events-targets';
 import { Stream } from 'aws-cdk-lib/aws-kinesis';
 import { Duration, RemovalPolicy } from 'aws-cdk-lib';
 
@@ -13,7 +13,7 @@ export interface HarmonyEventBusProps {
 export class HarmonyEventBus extends Construct {
   public readonly eventBus: EventBus;
   public readonly kinesisStream: Stream;
-  public readonly eventArchiveRule: Rule;
+  public readonly eventArchiveRule?: Rule;
 
   constructor(scope: Construct, id: string, props: HarmonyEventBusProps) {
     super(scope, id);
@@ -38,7 +38,7 @@ export class HarmonyEventBus extends Construct {
         eventPattern: {
           source: ['harmony.*'],
         },
-        targets: [new KinesisStreamTarget(this.kinesisStream)],
+        targets: [new KinesisStream(this.kinesisStream)],
         description: 'Archive all Harmony events to Kinesis',
       });
     }

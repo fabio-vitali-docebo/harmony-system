@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { UserPool, UserPoolClient, IdentityPool } from 'aws-cdk-lib/aws-cognito';
+import { UserPool, UserPoolClient, CfnIdentityPool, StringAttribute } from 'aws-cdk-lib/aws-cognito';
 import { Role, FederatedPrincipal, PolicyStatement, Effect } from 'aws-cdk-lib/aws-iam';
 
 export interface HarmonyAuthProps {
@@ -10,7 +10,7 @@ export interface HarmonyAuthProps {
 export class HarmonyAuth extends Construct {
   public readonly userPool: UserPool;
   public readonly userPoolClient: UserPoolClient;
-  public readonly identityPool: IdentityPool;
+  public readonly identityPool: CfnIdentityPool;
 
   constructor(scope: Construct, id: string, props: HarmonyAuthProps) {
     super(scope, id);
@@ -26,14 +26,8 @@ export class HarmonyAuth extends Construct {
         },
       },
       customAttributes: {
-        tenantId: {
-          dataType: 'String',
-          mutable: false,
-        },
-        role: {
-          dataType: 'String',
-          mutable: true,
-        },
+        tenantId: new StringAttribute({ mutable: false }),
+        role: new StringAttribute({ mutable: true }),
       },
     });
 
@@ -49,12 +43,12 @@ export class HarmonyAuth extends Construct {
     });
 
     // Identity Pool for AWS resource access
-    this.identityPool = new IdentityPool(this, 'IdentityPool', {
+    this.identityPool = new CfnIdentityPool(this, 'IdentityPool', {
       allowUnauthenticatedIdentities: false,
       cognitoIdentityProviders: [
         {
-          userPool: this.userPool,
-          userPoolClient: this.userPoolClient,
+          clientId: this.userPoolClient.userPoolClientId,
+          providerName: this.userPool.userPoolProviderName,
         },
       ],
     });
